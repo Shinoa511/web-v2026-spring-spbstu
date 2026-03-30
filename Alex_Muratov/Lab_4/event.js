@@ -36,7 +36,6 @@ export class Event {
         return this.participants.length;
     }
 
-
     constructor(id,tittle,participants,date) {
         this.id = id;
         this.tittle = tittle;
