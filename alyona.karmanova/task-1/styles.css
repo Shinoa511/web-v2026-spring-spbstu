@@ -1,15 +1,7 @@
-.name {
-    font-weight: bold;
-}
-
 .price {
     font-style: italic;
 }
 
-.product-name {
-    font-weight: bold;
-}
-
-.category-name {
+.product-name, .category-name {
     font-weight: bold;
 }
