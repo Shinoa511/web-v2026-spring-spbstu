@@ -10,9 +10,9 @@ function isBalanced(str) {
                 break;
             }
             let popedElem = arr.pop();
-            if (popedElem === '(' && str[i] != ')'
-                || popedElem === '{' && str[i] != '}'
-                || popedElem === '[' && str[i] != ']'
+            if (popedElem === '(' && str[i] !== ')'
+                || popedElem === '{' && str[i] !== '}'
+                || popedElem === '[' && str[i] !== ']'
             ) {
                 flag = false;
                 break;
