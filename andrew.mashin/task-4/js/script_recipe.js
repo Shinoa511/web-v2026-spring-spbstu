@@ -7,7 +7,7 @@ for (const key in recipesJson) {
 renderRecipes();
 
 window.addEventListener('storage', (event) => {
-    if (event.key == 'recipes') {
+    if (event.key === 'recipes') {
         recipes = JSON.parse(event.newValue) || [];
         renderRecipes();
     }
@@ -75,7 +75,7 @@ function addRecipe(title, ingredients, steps) {
 function addIngredientToRecipe(title, ingredient) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            const recipe = recipes.find(r => r.title == title);
+            const recipe = recipes.find(r => r.title === title);
             if (recipe) {
                 recipe.addIngredient(ingredient);
                 localStorage.setItem('recipes', JSON.stringify(recipes));
@@ -91,7 +91,7 @@ function addIngredientToRecipe(title, ingredient) {
 function addStepToRecipe(title, step) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            const recipe = recipes.find(r => r.title == title);
+            const recipe = recipes.find(r => r.title === title);
             if (recipe) {
                 recipe.steps.push(step);
                 localStorage.setItem('recipes', JSON.stringify(recipes));
@@ -107,8 +107,8 @@ function addStepToRecipe(title, step) {
 function deleteRecipe(title) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            const index = recipes.findIndex(recipe => recipe.title == title);
-            if (index != -1) {
+            const index = recipes.findIndex(recipe => recipe.title === title);
+            if (index !== -1) {
                 recipes.splice(index, 1);
                 localStorage.setItem('recipes', JSON.stringify(recipes));
                 resolve();
@@ -123,7 +123,7 @@ function deleteRecipe(title) {
 function deleteIngredientFromRecipe(title, ingredient) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            const recipe = recipes.find(r => r.title == title);
+            const recipe = recipes.find(r => r.title === title);
             if (recipe) {
                 recipe.removeIngredient(ingredient);
                 localStorage.setItem('recipes', JSON.stringify(recipes));
@@ -140,10 +140,10 @@ function deleteIngredientFromRecipe(title, ingredient) {
 function deleteStepFromRecipe(title, step) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            const recipe = recipes.find(r => r.title == title);
+            const recipe = recipes.find(r => r.title === title);
             if (recipe) {
                 const index = recipe.steps.indexOf(step);
-                if (index != -1) {
+                if (index !== -1) {
                     recipe.steps.splice(index, 1);
                     localStorage.setItem('recipes', JSON.stringify(recipes));
                     resolve();

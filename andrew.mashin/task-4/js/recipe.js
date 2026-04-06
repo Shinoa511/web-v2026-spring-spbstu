@@ -13,7 +13,7 @@ class Recipe {
 
     removeIngredient(ingredient) {
         const index = this.ingredients.indexOf(ingredient);
-        if (index != -1) {
+        if (index !== -1) {
             this.ingredients.splice(index, 1);
         }
     }
