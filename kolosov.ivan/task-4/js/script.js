@@ -23,6 +23,7 @@ function renderUsers() {
                 <button class="add-friend-btn">Add Friend</button>
             </div>
             <button class="delete-user-btn">Delete User</button>
+            
         `;
         container.appendChild(userDiv);
     });
@@ -60,7 +61,13 @@ function addFriend(index, friendID) {
                 reject (new Error("Nan"));
                 return;
             }   
-            users[index].addFriend(friendID);
+            try {
+                users[index].addFriend(friendID);
+            }
+            catch (error) {
+                reject(error);
+                return;
+            }
             localStorage.setItem('users', JSON.stringify(users));
             resolve();
         }, 1000);
