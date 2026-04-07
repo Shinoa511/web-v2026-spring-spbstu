@@ -137,31 +137,31 @@ document.querySelector('.users').addEventListener('click', (event) => {
         deleteUser(userIndex).then(() => {
             renderUsers();
         });
-    } else if(event.target.matches('.add-friend-btn')) {
+    } else if(event.target.matches('.add-friend-btn') || event.target.matches('.delete-friend-btn')) {
         event.target.disabled = true;
         const input = event.target.parentElement.querySelector('input');
         input.disabled = true;
         const friendID = Number.parseInt(input.value);
-        addFriend(userIndex, friendID).then(() => {
-            renderUsers();
-        }).catch(error => {
-            console.error("Error adding friend: ", error);
-            event.target.disabled = false;
-            input.disabled = false;
-        });
-        input.value = '';
-    } else if(event.target.matches('.delete-friend-btn')) {
-        event.target.disabled = true;
-        const input = event.target.parentElement.querySelector('input');
-        input.disabled = true;
-        const friendID = Number.parseInt(input.value);
-        deleteFriend(userIndex, friendID).then(() => {
-            renderUsers();
-        }).catch(error => {
-            console.error("Error deleting the friend: ", error);
-            event.target.disabled = false;
-            input.disabled = false;
-        });
+        
+        if(event.target.matches('.add-friend-btn')) {
+            addFriend(userIndex, friendID).then(() => {
+                renderUsers();
+            }).catch(error => {
+                console.error("Error adding friend: ", error);
+                event.target.disabled = false;
+                input.disabled = false;
+            });
+        }
+        else {
+            deleteFriend(userIndex, friendID).then(() => {
+                renderUsers();
+            }).catch(error => {
+                console.error("Error deleting the friend: ", error);
+                event.target.disabled = false;
+                input.disabled = false;
+            });
+        }
+
         input.value = '';
     }
 });
