@@ -12,7 +12,6 @@ function saveStudentsToLocalStorage() {
 function loadStudentsFromLocalStorage() {
     const data = localStorage.getItem("listStudents");
     if (!data) return [];
-    Student.usedIds.clear();
     const studentsData = JSON.parse(data);
     return studentsData.map(data => {
         const student = new Student(data.name, data.id);
@@ -115,11 +114,20 @@ function addStudentAsync(id, name) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             try {
+
+                const isIdExist = students.some(s => s.id == id);
+                if (isIdExist) {
+                    throw new Error("ID уже существует");
+                }
+
                 let student = new Student(name, id);
                 students.push(student);
                 resolve(student); 
             } catch (error) {
-                reject(error);
+                const wrappedError = new Error(`Ошибка при добавлении студента (id: ${id}, name: ${name}): ${error.message}`);
+                wrappedError.originalError = error;
+                console.error("Исходная ошибка:", error);
+                reject(wrappedError);
             }
         }, 1000); 
     });
@@ -136,11 +144,12 @@ function deleteStudentAsync(id) {
                 }
                 students = students.filter(s => s.id != id);
 
-                Student.usedIds.delete(found.id);
-
                 resolve("Студент удален");
             } catch (error) {
-                reject(error);
+                const wrappedError = new Error(`Ошибка при удалении студента (id: ${id}): ${error.message}`);
+                wrappedError.originalError = error;
+                console.error("Исходная ошибка:", error);
+                reject(wrappedError);
             }
         }, 1000);
     });
@@ -158,20 +167,21 @@ async function addStudent() {
     addButton.disabled = true;
     addButton.textContent = "Добавление...";
 
-    try {
-        await addStudentAsync(id, name);
-        
-        renderStudents();
-        
-        document.querySelector("#ID_add").value = "";
-        document.querySelector("#name_add").value = "";
-        
-    } catch (error) {
-        errorDiv.textContent = "Студент не добавлен: " + error.message;
-    } finally {
-        addButton.disabled = false;
-        addButton.textContent = "Добавить студента";
-    }
+    addStudentAsync(id, name)
+        .then(() => {
+            renderStudents();
+            
+            document.querySelector("#ID_add").value = "";
+            document.querySelector("#name_add").value = "";
+        })
+        .catch(error => {
+            errorDiv.textContent = "Студент не добавлен: " + error.message;
+            console.error(error);
+        })
+        .finally(() => {
+            addButton.disabled = false;
+            addButton.textContent = "Добавить студента";
+        });
 }
 
 async function deleteStudent() {
@@ -184,19 +194,20 @@ async function deleteStudent() {
     deleteButton.disabled = true;
     deleteButton.textContent = "Удаление...";
 
-    try {
-        await deleteStudentAsync(id);
-        
-        renderStudents();
-        
-        document.querySelector("#ID_delete").value = "";
-        
-    } catch (error) {
-        errorDiv.textContent = "Студент не удален: " + error.message;
-    } finally {
-        deleteButton.disabled = false;
-        deleteButton.textContent = "Удалить студента";
-    }
+    deleteStudentAsync(id)
+        .then(() => {
+            renderStudents();
+            
+            document.querySelector("#ID_delete").value = "";
+        })
+        .catch(error => {
+            errorDiv.textContent = "Студент не удален: " + error.message;
+            console.error(error);
+        })
+        .finally(() => {
+            deleteButton.disabled = false;
+            deleteButton.textContent = "Удалить студента";
+        });
 }
 
 function addGrade(button, studentId) {

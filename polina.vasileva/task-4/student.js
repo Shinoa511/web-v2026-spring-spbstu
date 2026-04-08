@@ -1,5 +1,4 @@
 export class Student {
-    static usedIds = new Set();
     #id;
     #name;
     #grades;
@@ -15,15 +14,9 @@ export class Student {
             throw new Error("ID должен быть положительным числом");
         }
 
-        if (Student.usedIds.has(Number(id))) {
-            throw new Error("ID уже существует");
-    }
-
-    Student.usedIds.add(Number(id));
-
-    this.#id = Number(id);
-    this.#name = name;
-    this.#grades = {}; //предмет - оценка
+        this.#id = Number(id);
+        this.#name = name;
+        this.#grades = {}; //предмет - оценка
     }
 
     addGrade(subject, grade) {
